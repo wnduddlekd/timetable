@@ -1,0 +1,381 @@
+:root {
+  --bg: #f4f5f7;
+  --panel: #ffffff;
+  --ink: #1f2430;
+  --muted: #6b7280;
+  --line: #e5e7eb;
+  --accent: #4c6093;
+  --danger: #e5484d;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family:
+    "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR",
+    system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+/* ---- 레이아웃: 시간표(왼쪽) / 입력 패널(오른쪽) ---- */
+.app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+}
+.app > main {
+  min-width: 0;
+}
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+.panel + .panel {
+  margin-top: 16px;
+}
+.panel h2 {
+  margin: 0 0 12px;
+  font-size: 15px;
+}
+.panel h2 .count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ---- 폼 ---- */
+label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 10px 0 4px;
+}
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 14px;
+  background: #fff;
+  color: var(--ink);
+}
+input:focus,
+select:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-color: var(--accent);
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.time-sel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.time-sel select {
+  padding-left: 8px;
+  padding-right: 4px;
+}
+.time-sel span {
+  color: var(--muted);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink);
+  margin-top: 12px;
+}
+.check input {
+  width: 16px;
+  height: 16px;
+}
+
+.swatches {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.swatches label {
+  margin: 0;
+  cursor: pointer;
+  position: relative;
+}
+.swatches input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.swatches span {
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  box-shadow: inset 0 0 0 2px #fff;
+}
+.swatches input:checked + span {
+  border-color: var(--ink);
+}
+.swatches input:focus-visible + span {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.btns {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+button {
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+}
+button:hover {
+  background: #f8f9fb;
+}
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  flex: 1;
+}
+button.primary:hover {
+  filter: brightness(1.06);
+}
+button.danger {
+  color: var(--danger);
+}
+
+.msg {
+  font-size: 12px;
+  margin-top: 10px;
+  min-height: 18px;
+  color: var(--danger);
+}
+.msg.warn {
+  color: #b45309;
+}
+
+/* ---- 과목 목록 ---- */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.list li:hover {
+  background: #f8f9fb;
+}
+.list li.editing {
+  border-color: var(--accent);
+  background: #f2f6ff;
+}
+.list li.empty {
+  color: var(--muted);
+  border: 0;
+  cursor: default;
+  padding: 6px 2px;
+}
+.list li.empty:hover {
+  background: transparent;
+}
+.list .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+}
+.list .info {
+  flex: 1;
+  min-width: 0;
+}
+.list .info b {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.list .info small {
+  color: var(--muted);
+}
+.list .del {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  padding: 4px 8px;
+  font-size: 16px;
+}
+.list .del:hover {
+  color: var(--danger);
+  background: transparent;
+}
+
+/* ---- 시간표 ---- */
+.stage {
+  overflow-x: auto;
+}
+.capture {
+  min-width: 620px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 22px 22px 18px;
+}
+.tt-title {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 0 14px;
+  color: var(--ink);
+}
+.tt-title:focus {
+  outline: none;
+}
+.tt-title::placeholder {
+  color: #b6bcc8;
+}
+
+.tt {
+  display: grid;
+  grid-template-columns: 48px repeat(var(--days), minmax(0, 1fr));
+}
+.tt-head {
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--ink);
+}
+.tt-head.corner {
+  border-bottom-color: transparent;
+}
+.tt-times {
+  position: relative;
+  height: calc(var(--hours) * var(--hour-h));
+}
+.tt-times span {
+  position: absolute;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--muted);
+}
+.tt-times span:first-child {
+  transform: none;
+}
+.tt-col {
+  position: relative;
+  height: calc(var(--hours) * var(--hour-h));
+  border-left: 1px solid var(--line);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent calc(var(--hour-h) - 1px),
+    var(--line) calc(var(--hour-h) - 1px),
+    var(--line) var(--hour-h)
+  );
+}
+.tt-col:last-child {
+  border-right: 1px solid var(--line);
+}
+
+.block {
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  border-radius: 7px;
+  border: 1px solid var(--bar);
+  padding: 4px 6px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.35;
+  cursor: pointer;
+  color: var(--ink);
+}
+.block b {
+  display: block;
+  font-size: 16px;
+}
+.block small {
+  display: block;
+  font-size: 12px;
+  opacity: 0.8;
+}
+.block.conflict {
+  outline: 2px dashed var(--bar);
+  outline-offset: -2px;
+}
+.block.draft {
+  opacity: 0.7;
+  border-style: dashed;
+  cursor: default;
+}
+.block.selected {
+  box-shadow: 0 0 0 2px var(--bar);
+}
+
+.stage-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.stage-bar p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.stage-bar button.primary {
+  flex: none;
+}
